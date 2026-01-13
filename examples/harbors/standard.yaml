@@ -1,0 +1,19 @@
+apiVersion: helm.hops.ops.com.ai/v1alpha1
+kind: Harbor
+metadata:
+  name: harbor
+  namespace: example-env
+spec:
+  clusterName: example-cluster
+  labels:
+    team: platform
+  namespace: harbor
+  values:
+    expose:
+      type: ingress
+      ingress:
+        hosts:
+          core: harbor.example.com
+    externalURL: https://harbor.example.com
+    persistence:
+      enabled: true

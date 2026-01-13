@@ -1,0 +1,38 @@
+# code: language=yaml
+#
+# Helm release for harbor
+#
+
+{{- $h := $state.harbor }}
+
+---
+apiVersion: helm.m.crossplane.io/v1beta1
+kind: Release
+metadata:
+  name: {{ $h.releaseName }}
+  annotations:
+    {{ setResourceNameAnnotation "helm-release-harbor" }}
+  labels: {{ $h.labels | toJson }}
+spec:
+  managementPolicies: {{ $h.managementPolicies | toJson }}
+  forProvider:
+    chart:
+      name: harbor
+      repository: https://helm.goharbor.io
+      version: 1.16.1
+    namespace: {{ $h.namespace }}
+    {{- if $h.overrideAllValues }}
+    values:
+      {{- toYaml $h.overrideAllValues | nindent 6 }}
+    {{- else }}
+    values:
+      fullnameOverride: harbor
+      nameOverride: harbor
+      {{- if $h.values }}
+      {{- toYaml $h.values | nindent 6 }}
+      {{- end }}
+    {{- end }}
+  rollbackLimit: 3
+  providerConfigRef:
+    name: {{ $h.providerConfigRef.name }}
+    kind: {{ $h.providerConfigRef.kind }}
