@@ -2,4 +2,4 @@ apiVersion: v2
 name: helm-harbor
 version: 0.0.0
 description: GitOps packaging for the Harbor Crossplane configuration
-appVersion: 1.16.1
+appVersion: 1.18.1
